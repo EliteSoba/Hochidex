@@ -4,7 +4,6 @@
 	<title>Jam Matchup Guide - Potemkin</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<!--link href="css/something.css" rel="stylesheet"-->
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
@@ -39,6 +38,7 @@
 		Jump: 5f
 		</div>
 	</div>
+	
 	<div class="row main" style="margin-bottom: 20px">
 		<div class="col-sm-6">
 		Face Up Wake-Up: 24
@@ -50,7 +50,7 @@
 	<h3>46PK Routes</h3>
 	<h4>Green Background = 236SSH Followup Possible</h4>
 	
-	<div class="row hochi puffpuff">
+	<div id="hochi0" class="row hochi puffpuff">
 		<div class="col-xs-8">
 		Throw Midscreen
 		</div>
@@ -58,7 +58,7 @@
 		c.S > f.S > 2HS(1)
 		</div>
 	</div>
-	<div class="row hochi puffpuff">
+	<div id="hochi1" class="row hochi puffpuff">
 		<div class="col-xs-8">
 		Throw Corner
 		</div>
@@ -66,7 +66,7 @@
 		c.S > f.S > 2HS(1)
 		</div>
 	</div>
-	<div class="row hochi puffpuff">
+	<div id="hochi2" class="row hochi puffpuff">
 		<div class="col-xs-8">
 		236SK kara > c.214K
 		</div>
@@ -74,7 +74,7 @@
 		c.S > f.S > 2HS(1)
 		</div>
 	</div>
-	<div class="row hochi">
+	<div id="hochi3" class="row hochi ">
 		<div class="col-xs-8">
 		IAD Kenroukaku
 		</div>
@@ -82,7 +82,7 @@
 		c.S > 2HS(1)
 		</div>
 	</div>
-	<div class="row hochi puffpuff">
+	<div id="hochi4" class="row hochi puffpuff">
 		<div class="col-xs-8">
 		236SS (CH)
 		</div>
@@ -90,7 +90,7 @@
 		6K > 2HS(2)
 		</div>
 	</div>
-	<div class="row hochi puffpuff">
+	<div id="hochi5" class="row hochi puffpuff">
 		<div class="col-xs-8">
 		IAD Geki
 		</div>
@@ -101,5 +101,8 @@
 	
 	<h4>Special thanks to <a href="https://twitter.com/OkaySway/">@OkaySway</a> for 46PK routes</h4>
 	</div>
+	<script>
+	$(function () {$('[data-toggle="tooltip"]').tooltip()})
+	</script>
 </body>
 </html>
