@@ -110,8 +110,7 @@ def main():
 		hp = 210 + 42/g[0] + 42/g[1] + 42/g[2] + 42/g[3] + 42/g[4]
 		hp /= char.DEFENSE
 		char.HP = int(hp+0.5)
-		if name != "zato":
-			continue
+		
 		content = template.replace("{{ NAME }}", char.NAME)
 		content = content.replace("{{ DEFENSE }}", "%1.2f" % char.DEFENSE)
 		content = content.replace("{{ GUTS }}", str(char.GUTS))
@@ -131,8 +130,7 @@ def main():
 			if len(h) > 2:
 				combo += " <a href=\"#hochi"+str(i)+"\" data-toggle=\"tooltip\" title=\""+h[2]+"\" style=\"color: red; font-size: small\">[?]</a>"
 			content = content.replace("{{ HOCHI"+str(i)+" }}", combo)
-		output = open("test.html", "w")
-		#output = open(name + ".html", "w")
+		output = open(name + ".html", "w")
 		output.write(content)
 		output.close()
 
