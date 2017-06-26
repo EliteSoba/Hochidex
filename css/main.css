@@ -1,0 +1,31 @@
+.container {
+	font-size: large;
+	color: #b2b6bd;
+}
+body {
+	background-color: rgb(27, 31, 34);
+}
+h1 {
+	color: #b2b6bd;
+	text-align: center;
+}
+h3 {
+	text-align: center;
+}
+h4 {
+	text-align: center;
+}
+.container .main div {
+	border-style: solid;
+	border-color: white;
+}
+.container .row div div{
+	border-style: none;
+}
+.container .hochi {
+	border-style: solid;
+	border-color: white;
+}
+.puffpuff {
+	background-color: #307114;
+}
