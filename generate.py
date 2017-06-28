@@ -8,7 +8,7 @@ class Char():
 	JUMP = 0
 	FUWU = 0
 	FDWU = 0
-	HOCHI = [("??", False), ("??", False), ("??", False, "oh no"), ("??", False), ("??", False), ("??", False)]
+	HOCHI = [("??", False), ("??", False), ("??", False), ("??", False), ("??", False), ("??", False)]
 	
 	def __init__(self, name="", defense=0, guts=0, hp=0, bdash_d=0, bdash_i="", jump=0, fuwu = 0, fdwu = 0):
 		self.NAME = name
@@ -25,79 +25,207 @@ def main():
 	guts = [(.9,.76,.6,.5,.4), (.87,.72,.58,.48,.4), (.84,.68,.56,.46,.38), (.81,.66,.54,.44,.38), (.78,.64,.5,.42,.38), (.75,.6,.48,.4,.36)]
 	chars = {}
 	chars["answer"] = Char(name="Answer", defense=1.03, guts=0, bdash_d=21, bdash_i="1-12 Strike", jump=3, fuwu=24, fdwu=24)
-	chars["answer"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("5K > 2HS(2)", True), ("2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("5K > 2HS(2)", True)]
+	chars["answer"].HOCHI=[
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("5K > 2HS(2)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("5K > 2HS(2)", True)]
 	
 	chars["axl"] = Char(name="Axl Low", defense=1.06, guts=1, bdash_d=16, bdash_i="1-8 Strike | 1-16 Airborne", jump=4, fuwu=25, fdwu=21)
-	chars["axl"].HOCHI=[("2S > 2HS(1) > Delay", True), ("2S > 2HS(1) > Delay", True), ("??", False), ("??", False), ("??", False), ("??", False)]
+	chars["axl"].HOCHI=[
+	("2S > 2HS(1) > Delay", True),
+	("2S > 2HS(1) > Delay", True),
+	("??", False),
+	("??", False),
+	("??", False),
+	("??", False)]
 	
 	chars["baiken"] = Char(name="Baiken", defense=1.18, guts=4, bdash_d=16, bdash_i="1-8 Strike | ?? Airborne", jump=3, fuwu=22, fdwu=21)
-	chars["baiken"].HOCHI=[("2K > 2HS(2)", True), ("2K > 2HS(2)", True), ("2S > 2HS(1)", False), ("2S > 2HS(2)", True), ("2S > 2HS(2)", False), ("2K > 2HS(2)", False)]
+	chars["baiken"].HOCHI=[
+	("2K > 2HS(2)", True),
+	("2K > 2HS(2)", True),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", False),
+	"2K > 2HS(2)", False)]
 	
 	chars["bedman"] = Char(name="Bedman", defense=.98, guts=0, bdash_d=23, bdash_i="1-10 Strike | 11-19 Foot", jump=3, fuwu=24, fdwu=30)
-	chars["bedman"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", False), ("c.S > 2S > 2HS(1)", True), ("2S > 2HS(2)", True)]
+	chars["bedman"].HOCHI=[("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", False),
+	("c.S > 2S > 2HS(1)", True),
+	("2S > 2HS(2)", True)]
 	
 	chars["chipp"] = Char(name="Chipp Zanuff", defense=1.3, guts=4, bdash_d=21, bdash_i="1-9 Strike | 1-21 Airborne", jump=3, fuwu=30, fdwu=24)
-	chars["chipp"].HOCHI=[("2S > 5K > 2HS(1)", True), ("2S > 5K > 2HS(1)", True), ("6P(1) > 2HS(1)", True), ("2S > 2HS(2)", True), ("c.S > 2S > 2HS(1)", False), ("2S > 2HS(2)", True)]
+	chars["chipp"].HOCHI=[("2S > 5K > 2HS(1)", True),
+	("2S > 5K > 2HS(1)", True),
+	("6P(1) > 2HS(1)", True),
+	("2S > 2HS(2)", True),
+	("c.S > 2S > 2HS(1)", False),
+	("2S > 2HS(2)", True)]
 	
 	chars["dizzy"] = Char(name="Dizzy", defense=1.06, guts=1, bdash_d=16, bdash_i="1-9 Strike | 1-13 Airborne", jump=3, fuwu=25, fdwu=24)
-	chars["dizzy"].HOCHI=[("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("5K > 2HS(1)", False), ("2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("2S > 2HS(1)", False)]
+	chars["dizzy"].HOCHI=[("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("5K > 2HS(1)", False),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("2S > 2HS(1)", False)]
 	
 	chars["elphelt"] = Char(name="Elphelt Valentine", defense=1.03, guts=0, bdash_d=13, bdash_i="1-9 Strike | 1-13 Airborne", jump=3, fuwu=27, fdwu=27)
-	chars["elphelt"].HOCHI=[("2S > 2HS(2) > Delay", False), ("2S > 2HS(2) > Delay", False), ("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("2S > 2HS(2)", False), ("2S > 2HS(1)", False)]
+	chars["elphelt"].HOCHI=[("2S > 2HS(2) > Delay", False),
+	("2S > 2HS(2) > Delay", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(2)", False),
+	("2S > 2HS(1)", False)]
 	
 	chars["faust"] = Char(name="Faust", defense=1, guts=0, bdash_d=13, bdash_i="1-7 Strike | 1-13 Airborne", jump=3, fuwu=25, fdwu=29)
-	chars["faust"].HOCHI=[("c.S > f.S > 2HS(1)", True), ("c.S > f.S > 2HS(1)", True), ("5K > 2HS(2)", True), ("??", False), ("c.S > f.S > 2HS(1)", False), ("c.S > 2HS(1)", True)]
+	chars["faust"].HOCHI=[("c.S > f.S > 2HS(1)", True),
+	("c.S > f.S > 2HS(1)", True),
+	("5K > 2HS(2)", True),
+	("??", False),
+	("c.S > f.S > 2HS(1)", False),
+	("c.S > 2HS(1)", True)]
 	
 	chars["kum"] = Char(name="Kum Haehyun", defense=.96, guts=2, bdash_d = 16, bdash_i = "1-9 Strike | 1-15 Airborne", jump=3, fuwu=25, fdwu=27)
-	chars["kum"].HOCHI=[("6K(1) > 2HS(2)", True), ("6K(1) > 2HS(2)", True), ("??", False), ("c.S > f.S > 2HS(1)", False), ("6K > 2HS(1)", True), ("2S > 2HS(1)", False)]
+	chars["kum"].HOCHI=[("6K(1) > 2HS(2)", True),
+	("6K(1) > 2HS(2)", True),
+	("??", False),
+	("c.S > f.S > 2HS(1)", False),
+	("6K > 2HS(1)", True),
+	("2S > 2HS(1)", False)]
 	
 	chars["ino"] = Char(name="I-No", defense=1.06, guts=1, bdash_d=16, bdash_i = "1-8 Strike | 1-16 Airborne", jump=3, fuwu=24, fdwu=20)
-	chars["ino"].HOCHI=[("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True)]
+	chars["ino"].HOCHI=[("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True)]
 	
 	chars["jacko"] = Char(name="Jack-O'", defense=1.03, guts=2, bdash_d=14, bdash_i="1-9 Strike | 1-13 Airborne", jump=3, fuwu=25, fdwu=23)
-	chars["jacko"].HOCHI=[("2S > 2HS(1)", True), ("2S > 2HS(1)", True, "Weird"), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True)]
+	chars["jacko"].HOCHI=[("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True, "Weird"),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True)]
 	
 	chars["jam"] = Char(name="Jam Kuradoberi", defense=1.06, guts=3, bdash_d=13, bdash_i="1-7 Strike | 1-12 Airborne", jump=3, fuwu=26, fdwu=25)
-	chars["jam"].HOCHI=[("2K > 2HS(2) > Delay", True), ("2K > 2HS(2) > Delay", True), ("5K > 2HS(2)", False), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", True)]
+	chars["jam"].HOCHI=[("2K > 2HS(2) > Delay", True),
+	("2K > 2HS(2) > Delay", True),
+	("5K > 2HS(2)", False),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True)]
 	
 	chars["johnny"] = Char(name="Johnny", defense=1, guts=3, bdash_d=11, bdash_i="1-7 Strike | 1-10 Airborne", jump=4, fuwu=25, fdwu=24)
-	chars["johnny"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", False), ("2S > 2HS(2)", False), ("2S > 2HS(2)", True)]
+	chars["johnny"].HOCHI=[("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", False),
+	("2S > 2HS(2)", False),
+	("2S > 2HS(2)", True)]
 	
 	chars["ky"] = Char(name="Ky Kiske", defense=1.03, guts=2, bdash_d=16, bdash_i="1-9 Strike | 1-16 Airborne", jump=3, fuwu=23, fdwu=21)
-	chars["ky"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("c.S > 6K > 2HS(1)", True), ("2S > 2HS(2)", True)]
+	chars["ky"].HOCHI=[("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("c.S > 6K > 2HS(1)", True),
+	("2S > 2HS(2)", True)]
 	
 	chars["leo"] = Char(name="Leo Whitefang", defense=1, guts=3, bdash_d=16, bdash_i="1-9 Strike | 1-15 Airborne", jump=4, fuwu=28, fdwu=26)
-	chars["leo"].HOCHI=[("c.S > 2S > 2HS(1)", True), ("c.S > 2S > 2HS(1)", True), ("c.S > 2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("c.S > 5HS(1) > 2HS(1)", True), ("??", False)]
+	chars["leo"].HOCHI=[("c.S > 2S > 2HS(1)", True),
+	("c.S > 2S > 2HS(1)", True),
+	("c.S > 2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("c.S > 5HS(1) > 2HS(1)", True),
+	("??", False)]
 	
 	chars["may"] = Char(name="May", defense=1.06, guts=3, bdash_d=13, bdash_i="1-9 Strike | 1-13 Airborne", jump=3, fuwu=25, fdwu=22)
-	chars["may"].HOCHI=[("2S > 2HS(2) > Delay", True), ("2S > 2HS(2) > Delay", True), ("5K > 2HS(1)", True, "Weird"), ("2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("5K > 2HS(2)", True)]
+	chars["may"].HOCHI=[("2S > 2HS(2) > Delay", True),
+	("2S > 2HS(2) > Delay", True),
+	("5K > 2HS(1)", True, "Weird"),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("5K > 2HS(2)", True)]
 	
 	chars["millia"] = Char(name="Millia Rage", defense=1.21, guts=3, bdash_d=11, bdash_i="1-5 Strike | 1-11 Airborne", jump=3, fuwu=25, fdwu=23)
-	chars["millia"].HOCHI=[("2S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(1)", False), ("2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("2S > 2HS(1)", False)]
+	chars["millia"].HOCHI=[("2S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("2S > 2HS(1)", False)]
 	
 	chars["potemkin"] = Char(name="Potemkin", defense=.93, guts=3, bdash_d=21, bdash_i="1-20 Strike | 1-21 Airborne", jump=5, fuwu=24, fdwu=22)
-	chars["potemkin"].HOCHI=[("c.S > f.S > 2HS(1)", True), ("c.S > f.S > 2HS(1)", True), ("c.S > f.S > 2HS(1)", True), ("c.S > 2HS(1)", False), ("6K > 2HS(2)", True), ("c.S > f.S > 2HS(1)", True)]
+	chars["potemkin"].HOCHI=[("c.S > f.S > 2HS(1)", True),
+	("c.S > f.S > 2HS(1)", True),
+	("c.S > f.S > 2HS(1)", True),
+	("c.S > 2HS(1)", False),
+	("6K > 2HS(2)", True),
+	("c.S > f.S > 2HS(1)", True)]
 	
 	chars["ramlethal"] = Char(name="Ramlethal Valentine", defense=1.06, guts=1, bdash_d=16, bdash_i="1-9 Strike | 1-16 Airborne", jump=3, fuwu=25, fdwu=23)
-	chars["ramlethal"].HOCHI=[("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("2S > 2HS(1)", False), ("2S > 2HS(1)", False)]
+	chars["ramlethal"].HOCHI=[("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False),
+	("2S > 2HS(1)", False)]
 	
 	chars["raven"] = Char(name="Raven", defense=1.1, guts=5, bdash_d=21, bdash_i="1-9 Strike | 1-20 Airborne", jump=3, fuwu=25, fdwu=24)
-	chars["raven"].HOCHI=[("c.S > f.S > 2HS(1)", True), ("c.S > f.S > 2HS(1)", True), ("2S > 2HS(1)", True), ("2S > 2HS(2)", True), ("6K > 2HS(1)", True), ("2S > 2HS(2)", True)]
+	chars["raven"].HOCHI=[("c.S > f.S > 2HS(1)", True),
+	("c.S > f.S > 2HS(1)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", True),
+	("6K > 2HS(1)", True),
+	("2S > 2HS(2)", True)]
 	
 	chars["sin"] = Char(name="Sin Kiske", defense=1.04, guts=1, bdash_d=24, bdash_i="1-16 Strike | 1-18 Throw", jump=3, fuwu=30, fdwu=21)
-	chars["sin"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("5K > 2HS(2)", True), ("2S > 2HS(1)", True), ("2S > 2HS(2)", False), ("5K > 2HS(2)", True)]
+	chars["sin"].HOCHI=[("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("5K > 2HS(2)", True),
+	("2S > 2HS(1)", True),
+	("2S > 2HS(2)", False),
+	("5K > 2HS(2)", True)]
 	
 	chars["slayer"] = Char(name="Slayer", defense=.96, guts=1, bdash_d=28, bdash_i="1-19 Full | 20 Strike", jump=4, fuwu=26, fdwu=20)
-	chars["slayer"].HOCHI=[("2S > 5K > 2HS(1)", True), ("2S > 5K > 2HS(1)", True), ("2S > 2HS(2)", True), ("2S > 2HS(1)", True), ("c.S > 2HS(2)", False), ("2S > 2HS(2)", True)]
+	chars["slayer"].HOCHI=[("2S > 5K > 2HS(1)", True),
+	("2S > 5K > 2HS(1)", True),
+	("2S > 2HS(2)", True),
+	("2S > 2HS(1)", True),
+	("c.S > 2HS(2)", False),
+	("2S > 2HS(2)", True)]
 	
 	chars["sol"] = Char(name="Sol Badguy", defense=1, guts=1, bdash_d=16, bdash_i="1-8 Strike | 1-16 Airborne", jump=3, fuwu=25, fdwu=21)
-	chars["sol"].HOCHI=[("2S > 5K > 2HS(1)", True), ("c.S > 2HS(2)", True), ("6P(1) > 2HS(1)", True), ("Wait > 6P(1) > 2HS(1)", False), ("c.S > 2S > 2HS(1)", False), ("2S > 2HS(1)", True)]
+	chars["sol"].HOCHI=[("2S > 5K > 2HS(1)", True),
+	("c.S > 2HS(2)", True),
+	("6P(1) > 2HS(1)", True),
+	("Wait > 6P(1) > 2HS(1)", False),
+	("c.S > 2S > 2HS(1)", False),
+	("2S > 2HS(1)", True)]
 	
 	chars["venom"] = Char(name="Venom", defense=1.03, guts=1, bdash_d=13, bdash_i="1-7 Strike | 1-13 Airborne", jump=4, fuwu=21, fdwu=26)
-	chars["venom"].HOCHI=[("2S > 6K > 2HS(1)", True), ("2S > 2HS(2)", True), ("c.S > 2HS(1)", True), ("2S > 2HS(2)", True), ("c.S > 2HS(2)", True), ("2S > 2HS(2)", True)]
+	chars["venom"].HOCHI=[("2S > 6K > 2HS(1)", True),
+	("2S > 2HS(2)", True),
+	("c.S > 2HS(1)", True),
+	("2S > 2HS(2)", True),
+	("c.S > 2HS(2)", True),
+	("2S > 2HS(2)", True)]
 	
 	chars["zato"] = Char(name="Zato-1", defense=1.09, guts=0, bdash_d=16, bdash_i="1-7 Strike | 1-16 Airborne", jump=3, fuwu=25, fdwu=22)
-	chars["zato"].HOCHI=[("2S > 2HS(2)", True), ("2S > 2HS(2)", True), ("5K > 2HS(2)", True), ("Wait > 5K > 2HS(2)", True, "Hard"), ("c.S > 2S > 2HS(1) > Delay", True), ("2S > 2HS(2)", True)]
+	chars["zato"].HOCHI=[("2S > 2HS(2)", True),
+	("2S > 2HS(2)", True),
+	("5K > 2HS(2)", True),
+	("Wait > 5K > 2HS(2)", True, "Hard"),
+	("c.S > 2S > 2HS(1) > Delay", True),
+	("2S > 2HS(2)", True)]
 	
 	
 	
