@@ -81,18 +81,28 @@ function comboToString(combo) {
 		full += bin2String(m.split('').map((ch) => ch.charCodeAt()).concat(filler));
 	}
 	var max = 0x404;
+	if (full.length > max) {
+		return false;
+	}
 	full += bin2String(new Array(max - full.length).fill(0));
 	
 	return full;
 }
 
 function saveFile() {
-	var data = comboToString("f.S > j.D > c.S > 2H > 46PK > 236SSH");
+	var combo = $("textarea").val();
+	if (!preview(false)) {
+		return;
+	}
+	var data = comboToString(combo);
+	if (!data) {
+		return;
+	}
 	var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
 	saveAs(blob, "test.ggcr");
 }
 
-function preview() {
+function preview(writeOnSuccess) {
 	var combo = $("textarea").val();
 	var comboList = combo.split(" > ");
 	var combo = [];
@@ -113,10 +123,19 @@ function preview() {
 	if (failures.length > 0) {
 		$("#comboArea").text("Warning: Couldn't parse the following moves: " + failures.join(", "));
 		$("#comboArea").css("color", "#FF0000");
+		return false;
+	}
+	else if (combo.length > 20) {
+		$("#comboArea").text("Warning: Currently cannot support combos with more than 20 moves");
+		$("#comboArea").css("color", "#FF0000");
+		return false;
 	}
 	else {
-		$("#comboArea").text(combo.join(" > "));
-		$("#comboArea").css("color", "#000000");
+		if (writeOnSuccess) {
+			$("#comboArea").text(combo.join(" > "));
+			$("#comboArea").css("color", "#000000");
+		}
+		return true;
 	}
 }
 </script>
@@ -128,7 +147,7 @@ function preview() {
 <textarea id="textarea" class="form-control"></textarea>
 <div id="comboArea"></div>
 </div>
-<button onClick="preview()" id="btn-preview" class="btn btn-primary">Preview</button>
+<button onClick="preview(true)" id="btn-preview" class="btn btn-primary">Preview</button>
 <button onClick="saveFile()" id="btn-save" class="btn btn-primary">Save to file</button>
 </div>
 </body>
