@@ -1,0 +1,135 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://cdn.rawgit.com/eligrey/Blob.js/0cef2746414269b16834878a8abc52eb9d53e6bd/Blob.js"></script>
+<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+<script>
+var moveList = {
+  "5P" : "NmlAtk5A",
+  "6P" : "NmlAtk6A",
+  "2P" : "NmlAtk2A",
+  "5K" : "NmlAtk5B",
+  "2K" : "NmlAtk2B",
+  "6K" : "NmlAtk6B",
+  "C.S" : "NmlAtk5CNear",
+  "F.S" : "NmlAtk5CFar",
+  "2S" : "NmlAtk2C",
+  "5H" : "NmlAtk5D",
+  "2H" : "NmlAtk2D",
+  "6H" : "NmlAtk6D",
+  "5D" : "NmlAtk5E",
+  "2D" : "NmlAtk2E",
+  "5D8" : "Homing Jump",
+  "5D6" : "Homing Dash",
+  "J.A" : "NmlAtkAir5A",
+  "J.K" : "NmlAtkAir5B",
+  "J.S" : "NmlAtkAir5C",
+  "J.H" : "NmlAtkAir5D",
+  "J.D" : "NmlAtkAir5E",
+  "46" : "NeoHochihu",
+  "46P" : ["NeoHochihu", "TuikaA"],
+  "46PP" : ["NeoHochihu", "TuikaA", "TuikaAA"],
+  "46PK" : ["NeoHochihu", "TuikaA", "TuikaAB"],
+  "22K" : "AsanagiB",
+  "22S" : "AsanagiC",
+  "22H" : "AsanagiD",
+  "236K" : "RyujinLand",
+  "J.236K" : "RyujinAir",
+  "214K" : "GekirinLand",
+  "J.214K" : "GekirinAir",
+  "623K" : "KenroukakuLand",
+  "J.623K" : "KenroukakuAir",
+  "236S" : "Bakushuu",
+  "236SP" : ["Bakushuu", "Mawarikomi"],
+  "236SK" : ["Bakushuu", "Ashibarai"],
+  "236SS" : ["Bakushuu", "HyappoShinshou"],
+  "236SSH" : ["Bakushuu", "HyappoShinshou", "HaseiSenriShinshou"],
+  "236SH" : ["Bakushuu", "SenriShinshou"],
+  "J.2K" : "Youeikyaku",
+  "632146H" : "Renhoukyaku",
+  "632146S" : "Hououshou",
+	"632146D" : "HououshouBST",
+  "236236H" : ["Saishingeki", "SaisinTuika"],
+	"RC" : "CmnActRomanCancel",
+	
+};
+//Don't have: cancel kicks, charge kicks, blitz
+
+//max is same as normal charge, held card same as normal card
+
+function bin2String(array) {
+  return String.fromCharCode.apply(String, array);
+}
+
+function comboToString(combo) {
+	var comboList = combo.toUpperCase().split(" > ");
+	var combo = [];
+	for (var move in comboList) {
+	  combo = combo.concat(moveList[comboList[move]]);
+	}
+
+	var full = String.fromCharCode.apply(String, [0x13, 0, 0, 0]);
+	var length = 0x20;
+	for (var move in combo) {
+		var m = combo[move];
+		var len = m.length;
+		var filler = new Array(length - len).fill(0);
+		full += bin2String(m.split('').map((ch) => ch.charCodeAt()).concat(filler));
+	}
+	var max = 0x404;
+	full += bin2String(new Array(max - full.length).fill(0));
+	
+	return full;
+}
+
+function saveFile() {
+	var data = comboToString("f.S > j.D > c.S > 2H > 46PK > 236SSH");
+	var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+	saveAs(blob, "test.ggcr");
+}
+
+function preview() {
+	var combo = $("textarea").val();
+	var comboList = combo.split(" > ");
+	var combo = [];
+	var failures = [];
+	for (var move in comboList) {
+		if (comboList[move].length == 0) {
+			$("#comboArea").text("Error: Please check your formatting and try again");
+			$("#comboArea").css("color", "#FF0000");
+			return false;
+		}
+		if (comboList[move].toUpperCase() in moveList) {
+			combo.push(comboList[move]);
+		}
+		else {
+			failures.push(comboList[move]);
+		}
+	}
+	if (failures.length > 0) {
+		$("#comboArea").text("Warning: Couldn't parse the following moves: " + failures.join(", "));
+		$("#comboArea").css("color", "#FF0000");
+	}
+	else {
+		$("#comboArea").text(combo.join(" > "));
+		$("#comboArea").css("color", "#000000");
+	}
+}
+</script>
+<div class="container">
+<h2>Jam Combo Recipe Creator</h2>
+<h4>Does not currently support Blitz Attack, Carded Kicks, or MAX Kicks</h4>
+<div class="form-group">
+<label for="textarea">Combo</label>
+<textarea id="textarea" class="form-control"></textarea>
+<div id="comboArea"></div>
+</div>
+<button onClick="preview()" id="btn-preview" class="btn btn-primary">Preview</button>
+<button onClick="saveFile()" id="btn-save" class="btn btn-primary">Save to file</button>
+</div>
+</body>
+</html>
