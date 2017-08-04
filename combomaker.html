@@ -12,8 +12,8 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<script src="js/jquery-1.11.3.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://cdn.rawgit.com/eligrey/Blob.js/0cef2746414269b16834878a8abc52eb9d53e6bd/Blob.js"></script>
-		<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+		<script src="https://cdn.rawgit.com/eligrey/Blob.js/0cef2746414269b16834878a8abc52eb9d53e6bd/Blob.js"></script>
+		<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
 		<style>
 			#previewarea {
 				border-style: solid;
@@ -329,17 +329,20 @@
 							moves = moves.concat(moveName);
 						}
 					}
-					
 					return moves;
 				}
 				
 				comboToString(combo) {
-					var moves = this.comboToParts(combo);
+					var moves = [];
+					var cList = this.comboToParts(combo);
+					for (var move in cList) {
+						moves = moves.concat(moveList[cList[move]]);
+					}
 					
 					var full = String.fromCharCode.apply(String, [0x13, 0, 0, 0]);
 					var length = 0x20;
 					for (var move in moves) {
-						var m = moveList[moves[move]];
+						var m = moves[move];
 						var len = m.length;
 						var filler = new Array(length - len).fill(0);
 						full += bin2String(m.split('').map((ch) => ch.charCodeAt()).concat(filler));
