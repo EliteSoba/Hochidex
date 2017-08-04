@@ -1,154 +1,389 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-</head>
-<body>
-<script src="js/jquery-1.11.3.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://cdn.rawgit.com/eligrey/Blob.js/0cef2746414269b16834878a8abc52eb9d53e6bd/Blob.js"></script>
-<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
-<script>
-var moveList = {
-  "5P" : "NmlAtk5A",
-  "6P" : "NmlAtk6A",
-  "2P" : "NmlAtk2A",
-  "5K" : "NmlAtk5B",
-  "2K" : "NmlAtk2B",
-  "6K" : "NmlAtk6B",
-  "C.S" : "NmlAtk5CNear",
-  "F.S" : "NmlAtk5CFar",
-  "2S" : "NmlAtk2C",
-  "5H" : "NmlAtk5D",
-  "2H" : "NmlAtk2D",
-  "6H" : "NmlAtk6D",
-  "5D" : "NmlAtk5E",
-  "2D" : "NmlAtk2E",
-  "5D8" : "Homing Jump",
-  "5D6" : "Homing Dash",
-  "J.A" : "NmlAtkAir5A",
-  "J.K" : "NmlAtkAir5B",
-  "J.S" : "NmlAtkAir5C",
-  "J.H" : "NmlAtkAir5D",
-  "J.D" : "NmlAtkAir5E",
-  "46" : "NeoHochihu",
-  "46P" : ["NeoHochihu", "TuikaA"],
-  "46PP" : ["NeoHochihu", "TuikaA", "TuikaAA"],
-  "46PK" : ["NeoHochihu", "TuikaA", "TuikaAB"],
-  "22K" : "AsanagiB",
-  "22S" : "AsanagiC",
-  "22H" : "AsanagiD",
-  "236K" : "RyujinLand",
-  "J.236K" : "RyujinAir",
-  "214K" : "GekirinLand",
-  "J.214K" : "GekirinAir",
-  "623K" : "KenroukakuLand",
-  "J.623K" : "KenroukakuAir",
-  "236S" : "Bakushuu",
-  "236SP" : ["Bakushuu", "Mawarikomi"],
-  "236SK" : ["Bakushuu", "Ashibarai"],
-  "236SS" : ["Bakushuu", "HyappoShinshou"],
-  "236SSH" : ["Bakushuu", "HyappoShinshou", "HaseiSenriShinshou"],
-  "236SH" : ["Bakushuu", "SenriShinshou"],
-  "J.2K" : "Youeikyaku",
-  "632146H" : "Renhoukyaku",
-  "632146S" : "Hououshou",
-	"632146D" : "HououshouBST",
-  "236236H" : ["Saishingeki", "SaisinTuika"],
-	"RC" : "CmnActRomanCancel",
-	
-};
-//Don't have: cancel kicks, charge kicks, blitz
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jam Combo Maker</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<script src="js/jquery-1.11.3.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/react@latest/dist/react.js"></script>
+		<script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<script src="js/jquery-1.11.3.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://cdn.rawgit.com/eligrey/Blob.js/0cef2746414269b16834878a8abc52eb9d53e6bd/Blob.js"></script>
+		<script xmlns="http://www.w3.org/1999/xhtml" async="" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+		<style>
+			#previewarea {
+				border-style: solid;
+				border-radius: 10px;
+				border-color: black;
+				border-width: 2px;
+			}
+			#previewarea ul li {
+				margin: 2px 0px;
+			}
+			#previewarea ul li div {
+				display: inline-block;
+				background-color: rgba(10, 10, 10, 0.85);
+				color: white;
+				padding: 0px 5px;
+				border-radius: 3px/6px;
+				font-weight: bold;
+				margin: auto;
+				vertical-align: middle;
+			}
+			img {
+				display: inline;
+				height: 16px;
+				margin: 3px;
+			}
+		</style>
+  </head>
+  <body>
+		<script type="text/babel">
+			var moveList = {
+				"5P" : "NmlAtk5A",
+				"6P" : "NmlAtk6A",
+				"2P" : "NmlAtk2A",
+				"5K" : "NmlAtk5B",
+				"2K" : "NmlAtk2B",
+				"6K" : "NmlAtk6B",
+				"C.S" : "NmlAtk5CNear",
+				"F.S" : "NmlAtk5CFar",
+				"2S" : "NmlAtk2C",
+				"5H" : "NmlAtk5D",
+				"2H" : "NmlAtk2D",
+				"6H" : "NmlAtk6D",
+				"5D" : "NmlAtk5E",
+				"2D" : "NmlAtk2E",
+				"5D8" : "Homing Jump",
+				"5D6" : "Homing Dash",
+				"J.P" : "NmlAtkAir5A",
+				"J.K" : "NmlAtkAir5B",
+				"J.S" : "NmlAtkAir5C",
+				"J.H" : "NmlAtkAir5D",
+				"J.D" : "NmlAtkAir5E",
+				"46" : "NeoHochihu",
+				"46P" : ["NeoHochihu", "TuikaA"],
+				"46PP" : ["NeoHochihu", "TuikaA", "TuikaAA"],
+				"46PK" : ["NeoHochihu", "TuikaA", "TuikaAB"],
+				"22K" : "AsanagiB",
+				"22S" : "AsanagiC",
+				"22H" : "AsanagiD",
+				"236K" : "RyujinLand",
+				"J.236K" : "RyujinAir",
+				"214K" : "GekirinLand",
+				"J.214K" : "GekirinAir",
+				"623K" : "KenroukakuLand",
+				"J.623K" : "KenroukakuAir",
+				"236S" : "Bakushuu",
+				"236SP" : ["Bakushuu", "Mawarikomi"],
+				"236SK" : ["Bakushuu", "Ashibarai"],
+				"236SS" : ["Bakushuu", "HyappoShinshou"],
+				"236SSH" : ["Bakushuu", "HyappoShinshou", "HaseiSenriShinshou"],
+				"236SH" : ["Bakushuu", "SenriShinshou"],
+				"J.2K" : "Youeikyaku",
+				"632146H" : "Renhoukyaku",
+				"632146S" : "Hououshou",
+				"632146D" : "HououshouBST",
+				"236236H" : ["Saishingeki", "SaisinTuika"],
+				"236236HP" : ["Saishingeki", "SaisinTuika"],
+				"RC" : "CmnActRomanCancel",
+				"BLITZ ATTACK" : "BlitzShieldCA",
+				"MAX BLITZ" : "MAXBlitz",
+				"IK" : "Ichigeki",
+				"THROW": "ThrowExe",
+				"AIR THROW": "AirThrowExe"
+			};
+			var nameList = {
+				"5P" : "Standing P",
+				"6P" : "6 + P",
+				"2P" : "Crouching P",
+				"5K" : "Standing K",
+				"2K" : "Crouching K",
+				"6K" : "6 + K",
+				"C.S" : "Close Range S",
+				"F.S" : "Long Range S",
+				"2S" : "Crouching S",
+				"5H" : "Standing H",
+				"2H" : "Crouching H",
+				"6H" : "6 + H",
+				"5D" : "Dust Attack - D",
+				"2D" : "Low Sweep - 2 + D",
+				"5D8" : "Homing Jump - 8 after a Dust Attack connects",
+				"5D6" : "Homing Dash - 6 after a Dust Attack connects",
+				"J.P" : "Jumping P",
+				"J.K" : "Jumping K",
+				"J.S" : "Jumping S",
+				"J.H" : "Jumping H",
+				"J.D" : "Jumping D",
+				"46" : "Hochifu - 4 6",
+				"46P" : ["Hochifu - 4 6", "Zekkei - P during Hochifu"],
+				"46PP" : ["Hochifu - 4 6", "Zekkei - P during Hochifu", "Goushao - P during Zekkei"],
+				"46PK" : ["Hochifu - 4 6", "Zekkei - P during Hochifu", "Dowanga - K during Zekkei"],
+				"22K" : "K Asanagi no Kokyuu - 2 2 + K",
+				"22S" : "S Asanagi no Kokyuu - 2 2 + S",
+				"22H" : "H Asanagi no Kokyuu - 2 2 + H",
+				"236K" : "Ryuujin - 236 + K",
+				"J.236K" : "Air Ryuujin - 236 + K in mid-air",
+				"214K" : "Gekirin - 214 + K",
+				"J.214K" : "Air Gekirin - 214 + K in mid-air",
+				"623K" : "Kenroukaku - 623 + K",
+				"J.623K" : "Kenroukaku - 623 + K in mid-air",
+				"236S" : "Bakushuu - 236 + S",
+				"236SP" : ["Bakushuu - 236 + S", "Mawarikomi - P during Bakushuu"],
+				"236SK" : ["Bakushuu - 236 + S", "Hamonkyaku - K during Bakushuu"],
+				"236SS" : ["Bakushuu - 236 + S", "Hyappo Shinshou - S during Bakushuu"],
+				"236SSH" : ["Bakushuu - 236 + S", "Hyappo Shinshou - S during Bakushuu", "Senri Shinshou - H after Bakushuu"],
+				"236SH" : ["Bakushuu - 236 + S", "Senri Shinshou - H after Bakushuu"],
+				"J.2K" : "Youeikyaku - 2 + K in mid-air",
+				"632146H" : "Renhoukyaku - 63214 6 + H",
+				"632146S" : "Choukyaku Hou'oushou - 63214 6 + S",
+				"632146D" : "Burst Cohukyaku Hou'oushou - 632146 6 + D",
+				"236236H" : ["Bao Saishinshou - 236 236 + H", "Kaorinquen - P during Bao Saishinshou"],
+				"236236HP" : ["Bao Saishinshou - 236 236 + H", "Kaorinquen - P during Bao Saishinshou"],
+				"RC" : "Roman Cancel - P + K + S",
+				"BLITZ ATTACK" : "Blitz Shield Charge Attack - S + H (Hold)",
+				"MAX BLITZ" : "Blitz Shield Charge Attack - S + H (Max Hold)",
+				"IK" : "Gasenkotsu - 236 236 + H",
+				"THROW": "Ground Throw - When close to opponent, 6 or 4 + H",
+				"AIR THROW": "Air Throw - When close and in mid-air 6 or 4 + H"
+			}
+			var icons = ["P","K","S","H","D","6","2","4","8","236","623","214","63214"];
 
-//max is same as normal charge, held card same as normal card
+			//Don't have: cancel kicks, charge kicks
 
-function bin2String(array) {
-  return String.fromCharCode.apply(String, array);
-}
+			//max is same as normal charge, held card same as normal card
 
-function comboToString(combo) {
-	var comboList = combo.toUpperCase().split(" > ");
-	var combo = [];
-	for (var move in comboList) {
-	  combo = combo.concat(moveList[comboList[move]]);
-	}
+				
+			function bin2String(array) {
+				return String.fromCharCode.apply(String, array);
+			}
 
-	var full = String.fromCharCode.apply(String, [0x13, 0, 0, 0]);
-	var length = 0x20;
-	for (var move in combo) {
-		var m = combo[move];
-		var len = m.length;
-		var filler = new Array(length - len).fill(0);
-		full += bin2String(m.split('').map((ch) => ch.charCodeAt()).concat(filler));
-	}
-	var max = 0x404;
-	if (full.length > max) {
-		return false;
-	}
-	full += bin2String(new Array(max - full.length).fill(0));
-	
-	return full;
-}
+			function preview(writeOnSuccess) {
+				var combo = $("textarea").val();
+				var comboList = combo.split(" > ");
+				var combo = [];
+				var failures = [];
+				for (var move in comboList) {
+					if (comboList[move].length == 0) {
+						$("#comboArea").text("Error: Please check your formatting and try again");
+						$("#comboArea").css("color", "#FF0000");
+						return false;
+					}
+					if (comboList[move].toUpperCase() in moveList) {
+						combo.push(comboList[move]);
+					}
+					else {
+						failures.push(comboList[move]);
+					}
+				}
+				if (failures.length > 0) {
+					$("#comboArea").text("Warning: Couldn't parse the following moves: " + failures.join(", "));
+					$("#comboArea").css("color", "#FF0000");
+					return false;
+				}
+				else if (combo.length > 20) {
+					$("#comboArea").text("Warning: Currently cannot support combos with more than 20 moves");
+					$("#comboArea").css("color", "#FF0000");
+					return false;
+				}
+				else {
+					if (writeOnSuccess) {
+						//$("#comboArea").text(combo.join(" > "));
+						//$("#comboArea").css("color", "#000000");
+						var comboList = $("#previewarea ul");
+						var cList = [];
+						for (var i in combo) {
+							cList = cList.concat(nameList[combo[i].toUpperCase()]);
+						}
+						for (var i in cList) {
+							var move = cList[i];
+							var splitMove = move.split(" ")
+							var div = document.createElement("div");
+							for (var part in splitMove) {
+								var p = splitMove[part];
+								if (icons.includes(p)) {
+									var img = document.createElement("img");
+									img.src = "./assets/moves/" + p + ".png";
+									div.append(img);
+								}
+								else {
+									div.append(p + " ");
+								}
+							}
+							var li = document.createElement("li");
+							li.append(div);
+							comboList.append(li);
+						}
+					}
+					return true;
+				}
+			}
+			
+			function Icon(props) {
+				return (
+					<img src={"./assets/moves/" + props.name + ".png"} />
+				);
+			}
+			
+			function Move(props) {
+				var moveData = [];
+				var splitMove = props.move.split(" ");
+				for (var part in splitMove) {
+					var p = splitMove[part];
+					if (icons.includes(p)) {
+						moveData.push(<Icon
+							key={part}
+							name={p}
+						  />);
+					}
+					else {
+						moveData.push(p + " ");
+					}
+				}
+				return (
+					<li>
+						<div>{moveData}</div>
+					</li>
+				);
+			}
+			
+			function MoveList(props) {
+				var cList = [];
+				var moves = [];
+				for (var i in props.combo) {
+					cList = cList.concat(nameList[props.combo[i]]);
+				}
+				for (var move in cList) {
+					moves.push(<Move
+						move={cList[move]}
+						key={move}
+						/>);
+				}
+				
+				return (
+					<ul className="list-unstyled" style={{margin: "10px"}}>
+						{moves}
+					</ul>
+				);
+			}
+			
+			function MoveArea(props) {
+				return (
+					<div className="col-md-4">
+						<label htmlFor="previewarea">ComboPreview</label>
+						<div id="previewarea">
+							<MoveList combo={props.combo} />
+						</div>
+					</div>
+				);
+			}
+			
+			function Header(props) {
+				return (
+					<div style={{textAlign: "center"}}>
+						<h2>Jam Combo Recipe Creator</h2>
+						<h4>Does not currently support Carded Kicks, Canceled Kicks, or MAX Kicks</h4>
+					</div>
+				);
+			}
+			
+			function InputArea(props) {
+				return (
+					<div className="col-md-8">
+						<div className="form-group">
+							<label htmlFor="textarea">Combo</label>
+							<textarea id="textarea" className="form-control" onChange={props.onTextChange} value={props.combo}>
+							</textarea>
+							<div id="warning"></div>
+						</div>
+						<button onClick={props.onSave} id="btn-save" className="btn btn-primary"> Save to file</button>
+					</div>
+				);
+			}
+			
+			class ComboMaker extends React.Component {
+				constructor() {
+					super();
+					this.state = JSON.parse(localStorage.getItem('comboData') || '{"combo": "f.S > 2D"}');
+					this.onTextChange = this.onTextChange.bind(this);
+					this.onSave = this.onSave.bind(this);
+				}
+				
+				onTextChange(event) {
+					var state = $.extend({}, this.state);
+					state["combo"] = event.target.value;
+					localStorage.setItem('comboData', JSON.stringify(state));
+					this.setState({combo: event.target.value});
+				}
+				
+				comboToParts(combo) {
+					var comboList = combo.split(">");
+					var moves = [];
+					for (var move in comboList) {
+						var moveName = comboList[move].trim().toUpperCase();
+						if (moveName in moveList) {
+							moves = moves.concat(moveName);
+						}
+					}
+					
+					return moves;
+				}
+				
+				comboToString(combo) {
+					var moves = this.comboToParts(combo);
+					
+					var full = String.fromCharCode.apply(String, [0x13, 0, 0, 0]);
+					var length = 0x20;
+					for (var move in moves) {
+						var m = moveList[moves[move]];
+						var len = m.length;
+						var filler = new Array(length - len).fill(0);
+						full += bin2String(m.split('').map((ch) => ch.charCodeAt()).concat(filler));
+					}
+					var max = 0x404;
+					if (full.length > max) {
+						return false;
+					}
+					full += bin2String(new Array(max - full.length).fill(0));
+					
+					return full;
+				}
 
-function saveFile() {
-	var combo = $("textarea").val();
-	if (!preview(false)) {
-		return;
-	}
-	var data = comboToString(combo);
-	if (!data) {
-		return;
-	}
-	var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-	saveAs(blob, "test.ggcr");
-}
+				saveFile() {
+					var data = this.comboToString(this.state.combo);
+					if (!data) {
+						return;
+					}
+					var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+					saveAs(blob, "combo.ggcr");
+				}
+				
+				onSave() {
+					this.saveFile();
+				}
+				
+				render() {
+					var comboParts = this.comboToParts(this.state.combo);
+					return (
+						<div className="container">
+							<Header />
+							<InputArea onSave={this.onSave} onTextChange={this.onTextChange} combo={this.state.combo} />
+							<MoveArea combo={comboParts} />
+						</div>
+					);
+				}
+			}
+			
+			ReactDOM.render(
+				<ComboMaker />,
+				document.getElementById('root')
+			);
 
-function preview(writeOnSuccess) {
-	var combo = $("textarea").val();
-	var comboList = combo.split(" > ");
-	var combo = [];
-	var failures = [];
-	for (var move in comboList) {
-		if (comboList[move].length == 0) {
-			$("#comboArea").text("Error: Please check your formatting and try again");
-			$("#comboArea").css("color", "#FF0000");
-			return false;
-		}
-		if (comboList[move].toUpperCase() in moveList) {
-			combo.push(comboList[move]);
-		}
-		else {
-			failures.push(comboList[move]);
-		}
-	}
-	if (failures.length > 0) {
-		$("#comboArea").text("Warning: Couldn't parse the following moves: " + failures.join(", "));
-		$("#comboArea").css("color", "#FF0000");
-		return false;
-	}
-	else if (combo.length > 20) {
-		$("#comboArea").text("Warning: Currently cannot support combos with more than 20 moves");
-		$("#comboArea").css("color", "#FF0000");
-		return false;
-	}
-	else {
-		if (writeOnSuccess) {
-			$("#comboArea").text(combo.join(" > "));
-			$("#comboArea").css("color", "#000000");
-		}
-		return true;
-	}
-}
-</script>
-<div class="container">
-<h2>Jam Combo Recipe Creator</h2>
-<h4>Does not currently support Blitz Attack, Carded Kicks, or MAX Kicks</h4>
-<div class="form-group">
-<label for="textarea">Combo</label>
-<textarea id="textarea" class="form-control"></textarea>
-<div id="comboArea"></div>
-</div>
-<button onClick="preview(true)" id="btn-preview" class="btn btn-primary">Preview</button>
-<button onClick="saveFile()" id="btn-save" class="btn btn-primary">Save to file</button>
-</div>
-</body>
+		</script>
+		<div id="root"></div>
+  </body>
 </html>
