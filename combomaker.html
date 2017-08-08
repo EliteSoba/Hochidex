@@ -74,10 +74,22 @@
 				"22H" : "AsanagiD",
 				"236K" : "RyujinLand",
 				"J.236K" : "RyujinAir",
+				"C.236K" : "RyujinKyoukaLand",
+				"J.C.236K" : "RyujinKyoukaAir",
 				"214K" : "GekirinLand",
 				"J.214K" : "GekirinAir",
+				"C.214K" : "GekirinKyoukaLand",
+				"J.C.214K" : "GekirinKyoukaAir",
 				"623K" : "KenroukakuLand",
 				"J.623K" : "KenroukakuAir",
+				"C.623K" : "KenroukakuKyoukaLand",
+				"J.C.623K" : "KenroukakuKyoukaAir",
+				"~236K" : "RyujinHasei",
+				"~C.236K" : "RyujinKyoukaHasei",
+				"~214K" : "GekirinHasei",
+				"~C.214K" : "GekirinKyoukaHasei",
+				"~623K" : "KenroukakuHasei",
+				"~C.623K" : "KenroukakuKyoukaHasei",
 				"236S" : "Bakushuu",
 				"236SP" : ["Bakushuu", "Mawarikomi"],
 				"236SK" : ["Bakushuu", "Ashibarai"],
@@ -128,10 +140,22 @@
 				"22H" : "H Asanagi no Kokyuu - 2 2 + H",
 				"236K" : "Ryuujin - 236 + K",
 				"J.236K" : "Air Ryuujin - 236 + K in mid-air",
+				"C.236K" : "Fortified Ryuujin - 236 + K",
+				"J.C.236K" : "Air Fortified Ryuujin - 236 + K in mid-air",
 				"214K" : "Gekirin - 214 + K",
 				"J.214K" : "Air Gekirin - 214 + K in mid-air",
+				"C.214K" : "Fortified Gekirin - 214 + K",
+				"J.C.214K" : "Air Fortified Gekirin - 214 + K in mid-air",
 				"623K" : "Kenroukaku - 623 + K",
 				"J.623K" : "Kenroukaku - 623 + K in mid-air",
+				"C.623K" : "Fortified Kenroukaku - 623 + K",
+				"J.C.623K" : "Air Fortified Kenroukaku - 623 + K in mid-air",
+				"~236K" : "Ryuujin (Follow-up) - 236 + K",
+				"~C.236K" : "Fortified Ryuujin (Follow-up) - 236 + K",
+				"~214K" : "Gekirin (Follow-up) - 214 + K",
+				"~C.214K" : "Fortified Gekirin (Follow-up) - 214 + K",
+				"~623K" : "Kenroukaku (Follow-up) - 623 + K",
+				"~C.623K" : "Fortified Kenroukaku (Follow-up) - 623 + K",
 				"236S" : "Bakushuu - 236 + S",
 				"236SP" : ["Bakushuu - 236 + S", "Mawarikomi - P during Bakushuu"],
 				"236SK" : ["Bakushuu - 236 + S", "Hamonkyaku - K during Bakushuu"],
@@ -160,67 +184,6 @@
 				
 			function bin2String(array) {
 				return String.fromCharCode.apply(String, array);
-			}
-
-			function preview(writeOnSuccess) {
-				var combo = $("textarea").val();
-				var comboList = combo.split(" > ");
-				var combo = [];
-				var failures = [];
-				for (var move in comboList) {
-					if (comboList[move].length == 0) {
-						$("#comboArea").text("Error: Please check your formatting and try again");
-						$("#comboArea").css("color", "#FF0000");
-						return false;
-					}
-					if (comboList[move].toUpperCase() in moveList) {
-						combo.push(comboList[move]);
-					}
-					else {
-						failures.push(comboList[move]);
-					}
-				}
-				if (failures.length > 0) {
-					$("#comboArea").text("Warning: Couldn't parse the following moves: " + failures.join(", "));
-					$("#comboArea").css("color", "#FF0000");
-					return false;
-				}
-				else if (combo.length > 20) {
-					$("#comboArea").text("Warning: Currently cannot support combos with more than 20 moves");
-					$("#comboArea").css("color", "#FF0000");
-					return false;
-				}
-				else {
-					if (writeOnSuccess) {
-						//$("#comboArea").text(combo.join(" > "));
-						//$("#comboArea").css("color", "#000000");
-						var comboList = $("#previewarea ul");
-						var cList = [];
-						for (var i in combo) {
-							cList = cList.concat(nameList[combo[i].toUpperCase()]);
-						}
-						for (var i in cList) {
-							var move = cList[i];
-							var splitMove = move.split(" ")
-							var div = document.createElement("div");
-							for (var part in splitMove) {
-								var p = splitMove[part];
-								if (icons.includes(p)) {
-									var img = document.createElement("img");
-									img.src = "./assets/moves/" + p + ".png";
-									div.append(img);
-								}
-								else {
-									div.append(p + " ");
-								}
-							}
-							var li = document.createElement("li");
-							li.append(div);
-							comboList.append(li);
-						}
-					}
-					return true;
-				}
 			}
 			
 			function Icon(props) {
@@ -286,7 +249,7 @@
 				return (
 					<div style={{textAlign: "center"}}>
 						<h2>Jam Combo Recipe Creator</h2>
-						<h4>Does not currently support Carded Kicks, Canceled Kicks, or MAX Kicks</h4>
+						<h4>MAX Kicks are treated by the game identically to Carded Kicks</h4>
 					</div>
 				);
 			}
@@ -308,7 +271,7 @@
 			class ComboMaker extends React.Component {
 				constructor() {
 					super();
-					this.state = JSON.parse(localStorage.getItem('comboData') || '{"combo": "f.S > 2D"}');
+					this.state = JSON.parse(localStorage.getItem('comboData') || '{"combo": "6H > 236SSH > RC > 2S > 2H > 46PK > j.S > j.S > j.H > j.236K~623K~c.214K > c.S > 2H > 236236H"}');
 					this.onTextChange = this.onTextChange.bind(this);
 					this.onSave = this.onSave.bind(this);
 				}
@@ -325,8 +288,18 @@
 					var moves = [];
 					for (var move in comboList) {
 						var moveName = comboList[move].trim().toUpperCase();
-						if (moveName in moveList) {
-							moves = moves.concat(moveName);
+						var moveChain = [moveName];
+						if (moveName.includes("~")) {
+							var moveChain = moveName.split("~");
+							// Turn follow-ups into follow-up commands
+							for (var i = 1; i < moveChain.length; i++) {
+								moveChain[i] = "~" + moveChain[i];
+							}
+						}
+						for (var part in moveChain) {
+							if (moveChain[part] in moveList) {
+								moves = moves.concat(moveChain[part]);
+							}
 						}
 					}
 					return moves;
