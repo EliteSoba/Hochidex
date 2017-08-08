@@ -39,6 +39,10 @@
 				height: 16px;
 				margin: 3px;
 			}
+			#warning {
+				color: red;
+				font-weight: bold;
+			}
 		</style>
   </head>
   <body>
@@ -250,20 +254,28 @@
 					<div style={{textAlign: "center"}}>
 						<h2>Jam Combo Recipe Creator</h2>
 						<h4>The game treats MAX Kicks and Carded Kicks identically</h4>
+						<h5><a href="https://github.com/WesselKuipers/GGRev2ComboRecipeManager">Click here for more information about how to import these into the game</a></h5>
 					</div>
 				);
 			}
 			
 			function InputArea(props) {
+				var warning = "";
+				console.log(props.comboLength);
+				var buttonClass = "btn btn-primary";
+				if (props.comboLength > 31) {
+					warning = "Warning: Currently does not support more than 31 moves";
+					buttonClass += " disabled";
+				}
 				return (
 					<div className="col-md-8">
 						<div className="form-group">
 							<label htmlFor="textarea">Combo</label>
 							<textarea id="textarea" className="form-control" onChange={props.onTextChange} value={props.combo}>
 							</textarea>
-							<div id="warning"></div>
+							<div id="warning">{warning}</div>
 						</div>
-						<button onClick={props.onSave} id="btn-save" className="btn btn-primary"> Save to file</button>
+						<button onClick={props.onSave} id="btn-save" className={buttonClass}> Save to file</button>
 					</div>
 				);
 			}
@@ -347,7 +359,7 @@
 					return (
 						<div className="container">
 							<Header />
-							<InputArea onSave={this.onSave} onTextChange={this.onTextChange} combo={this.state.combo} />
+							<InputArea onSave={this.onSave} onTextChange={this.onTextChange} combo={this.state.combo} comboLength={comboParts.length}/>
 							<MoveArea combo={comboParts} />
 						</div>
 					);
