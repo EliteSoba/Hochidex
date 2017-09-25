@@ -315,7 +315,10 @@
         return str;
       }
       function cellToString(cell) {
-        if (cell.style && !$.isEmptyObject(cell.style) && cell.content) {
+		if (!cell.content) {
+			return "";
+		}
+        if (cell.style && !$.isEmptyObject(cell.style)) {
           return "style=\"" + objectToCSS(cell.style) + "\" | " + cell.content;
         }
         else {
