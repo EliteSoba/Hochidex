@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Google Sheets to Wiki Table Converter</title>
+    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom-server.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>    
+      table.wikitable {
+          background-color: #f9f9f9;
+          border: 1px solid #aaa;
+          border-collapse: collapse;
+          color: black;
+      }
+      table.wikitable > tr > th,
+      table.wikitable > tr > td,
+      table.wikitable > * > tr > th,
+      table.wikitable > * > tr > td {
+          border: 1px solid #aaa;
+          padding: 0.2em 0.4em;
+      }
+      table.wikitable > tr > th,
+      table.wikitable > * > tr > th {
+          background-color: #f2f2f2;
+          text-align: center;
+      }
+      table.wikitable > caption {
+          font-weight: bold;
+          color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      // Client ID and API key from the Developer Console
+      var CLIENT_ID = '983364338536-4r42vgue30vclpuojv4ahn1ahnc5imce.apps.googleusercontent.com';
+
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+
+      var authorizeButton = document.getElementById('authorize-button');
+      var signoutButton = document.getElementById('signout-button');
+
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client.init({
+          discoveryDocs: DISCOVERY_DOCS,
+          clientId: CLIENT_ID,
+          scope: SCOPES
+        }).then(function () {
+          // Listen for sign-in state changes.
+          //gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+          $("#load-button").css("display","inline-block");
+        });
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(sheetID, callback) {
+        if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
+          gapi.auth2.getAuthInstance().signIn();
+        }
+        var signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+        updateSigninStatus(signedIn, sheetID, callback);
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick() {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn, sheetID, callback) {
+        if (isSignedIn) {
+          getDataFromSheet(sheetID, callback);
+        }
+      }
+      
+      function trimRows(arr) {
+        var end = -1;
+        for (var i = arr.length - 1; i >= 0; i--) {
+          var isEmpty = arr[i].reduce(function(a, b) {
+            return a && !b.content;
+          }, true);
+          if (!isEmpty) {
+            end = i;
+            break;
+          }
+        }
+        return arr.slice(0, end+1);
+      }
+      
+      function trim(arr) {
+        var end = -1;
+        for (var i = arr.length - 1; i >= 0; i--) {
+          if (arr[i].content || arr[i].style) {
+            end = i;
+            break;
+          }
+        }
+        return arr.slice(0, end+1);
+      }
+      
+      function zeroIfNull(value) {
+        return value ? value : 0;
+      }
+      
+      function getDataFromSheet(sheetID, callback) {
+        gapi.client.sheets.spreadsheets.get({
+          spreadsheetId: sheetID,
+          includeGridData: true,
+        })
+        .then(function(response) {
+          var sheets = response.result.sheets;
+          var data = [];
+          if (sheets.length > 0) {
+            for (var i = 0; i < sheets.length; i++) {
+              var sheet = [];
+              var rows = sheets[i].data[0].rowData;
+              var frows = zeroIfNull(sheets[i].properties.gridProperties.frozenRowCount);
+              var fcols = zeroIfNull(sheets[i].properties.gridProperties.frozenColumnCount);
+              var title = sheets[i].properties.title;
+              if (rows.length > 0) {
+                for (var j = 0; j < rows.length; j++) {
+                  if (rows[j].values) {
+                    sheet.push(trim(rows[j].values.map(function(v) {
+                      if (!$.isEmptyObject(v)) {
+                        var format = {};
+                        jQuery.extend(format, v.userEnteredFormat);
+                        jQuery.extend(format, v.effectiveFormat);
+                        if (!$.isEmptyObject(format)) {
+                          var style = {};
+                          // Not using background colors for now
+                          if (format.backgroundColor) {
+                            if (zeroIfNull(format.backgroundColor.red) === 1
+                            && zeroIfNull(format.backgroundColor.green) === 1
+                            && zeroIfNull(format.backgroundColor.blue) === 1) {
+                              //default. Do nothing for now.
+                            }
+                            else {
+                              style["background"] = "rgb("
+                                + Math.round(zeroIfNull(format.backgroundColor.red) * 255) + ","
+                                + Math.round(zeroIfNull(format.backgroundColor.green) * 255) + ","
+                                + Math.round(zeroIfNull(format.backgroundColor.blue) * 255) + ")";
+                            }
+                          }
+                          if (format.textFormat && format.textFormat.foregroundColor) {
+                            if (zeroIfNull(format.textFormat.foregroundColor.red) === 0
+                            && zeroIfNull(format.textFormat.foregroundColor.green) === 0
+                            && zeroIfNull(format.textFormat.foregroundColor.blue) === 0) {
+                              //default. Do nothing for now.
+                            }
+                            else {
+                              style["color"] = "rgb("
+                                + Math.round(zeroIfNull(format.textFormat.foregroundColor.red) * 255) + ","
+                                + Math.round(zeroIfNull(format.textFormat.foregroundColor.green) * 255) + ","
+                                + Math.round(zeroIfNull(format.textFormat.foregroundColor.blue) * 255) + ")";
+                            }
+                          }
+                          if (format.textFormat) {
+                            if (format.textFormat.bold) {
+                              style["fontWeight"] = "bold";
+                            }
+                            if (format.textFormat.italic) {
+                              style["fontStyle"] = "italic";
+                            }
+                            if (format.textFormat.strikethrough) {
+                              style["textDecoration"] = "line-through";
+                            }
+                            if (format.textFormat.underline) {
+                              if (style["textDecoration"]) {
+                                style["textDecoration"] = style["textDecoration"] + " underline";
+                              }
+                              else {
+                              style["textDecoration"] = "underline";
+                              }
+                            }
+                          }
+                          return new Cell(style, v.formattedValue);
+                        }
+                        else {
+                          return new Cell(false, v.formattedValue);
+                        }
+                      }
+                      else {
+                        return new Cell(false, "");
+                      }
+                    })));
+                  }
+                }
+              }
+              sheet = trimRows(sheet);
+              data.push({data: sheet, frows: frows, fcols: fcols, title: title});
+            }
+            callback(data);
+          }
+          else {
+            callback(null);
+          }
+        },
+        function(response) {
+          callback(null);
+        });
+      }
+    </script>
+    <script type="text/babel">
+
+      function Cell(style, content) {
+        this.style = style;
+        this.content = content;
+      }
+      function TableCell(props) {
+        return (
+          <span>
+            {props.cell ? props.cell.content : ""}
+          </span>
+        );
+      }
+      function TableRow(props) {
+        var i = 0;
+        var cells = props.cells.map(function(a){
+          var style = a && a.style ? a.style : {};
+          if (i < props.fcols) {
+            return <th key={i++} style={style}><TableCell cell={a}/></th>;
+          }
+          else {
+            return <td key={i++} style={style}><TableCell cell={a}/></td>;
+          }
+        });
+        return (
+          <tr>
+            {cells}
+          </tr>
+        );
+      }
+      function FrozenRow(props) {
+        var i = 0;
+        var cells = props.cells.map(function(a){
+          var style = a && a.style ? a.style : {};
+          return <th key={i++} style={style}><TableCell cell={a}/></th>;
+        });
+        return (
+          <tr>
+            {cells}
+          </tr>
+        );
+      }
+      function PreviewTable(props) {
+        var rows = [];
+        for (var i = 0; i < props.data.length; i++) {
+          if (i < props.frows) {
+            rows.push(<FrozenRow cells={props.data[i]} key={i}/>);
+          }
+          else {
+            rows.push(<TableRow cells={props.data[i]} key={i} fcols={props.fcols}/>);
+          }
+        }
+        return (
+          <div>
+            <table className="wikitable"
+              style={{textAlign: "center", margin: "1em auto 1em auto"}}
+            >
+              <tbody>
+                {rows}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      function objectToCSS(style) {
+        var str = "";
+        for (var s in style) {
+          if (style.hasOwnProperty(s)) {
+            if (s === "textDecoration") {
+              //lazy mode zzz
+              str += "text-decoration: " + style[s] + ";"
+            }
+            else if (s === "fontWeight") {
+              str += "font-weight: " + style[s] + ";"
+            }
+            else if (s === "fontStyle") {
+              str += "font-style: " + style[s] + ";"
+            }
+            else {
+              str += s + ": " + style[s] + ";";
+            }
+          }
+        }
+        return str;
+      }
+      function cellToString(cell) {
+        if (cell.style && !$.isEmptyObject(cell.style)) {
+          return "style=\"" + objectToCSS(cell.style) + "\" | " + cell.content;
+        }
+        else {
+          return cell.content;
+        }
+      }
+      function TableCode(props) {
+        var data = "{| class=\"wikitable\"  style=\"text-align: center; margin: 1em auto 1em auto;\"\n";
+        var rows = [];
+        for (var i = 0; i < props.data.length; i++) {
+          var row = "";
+          for (var j = 0; j < props.data[i].length; j++) {
+            if (j < props.fcols || i < props.frows) {
+              row += "! ";
+            }
+            else {
+              row += "| ";
+            }
+            row += cellToString(props.data[i][j]) + "\n";
+          }
+          rows.push(row);
+        }
+        data += rows.join("|-\n");
+        data += "|}"
+        return (
+          <div className={"col-md-12"}>
+            <textarea
+              id="textarea"
+              className="form-control"
+              value={data}
+              readOnly={true}
+              style={{height: "300px"}}
+            />
+          </div>
+        );
+      }
+      class InputArea extends React.Component {
+        constructor(props) {
+          super(props);
+          
+          this.onChange = this.onChange.bind(this);
+          this.onClick = this.onClick.bind(this);
+        }
+        
+        onChange(e) {
+          if (this.props.onChange) {
+            this.props.onChange(e.target.value);
+          }
+        }
+        
+        onClick() {
+          if (this.props.onClick) {
+            this.props.onClick();
+          }
+        }
+        
+        render() {
+          return (
+            <div>
+              <div className={"col-md-8"}>
+                <input
+                  onChange={this.onChange}
+                  className="form-control"
+                  placeholder={"Enter Google Sheets ID"}
+                  defaultValue={this.props.defaultValue}
+                />
+              </div>
+              <div className={"col-md-4"}>
+                <button
+                  className="btn btn-primary"
+                  id="load-button"
+                  style={{display:"none"}}
+                  onClick={this.onClick}
+                >
+                  Load Sheet
+                </button>
+              </div>
+            </div>
+          );
+        }
+      }
+      class Test extends React.Component {
+        constructor(props) {
+          super(props);
+          
+          this.state = {
+            sheetsID: "1LG-4mnxUcjD2059AoVIOe8CHeZivEbDvEu-g_LyUId8",
+            data:[],
+            frows: 0,
+            fcols: 0,
+          };
+          
+          this.onChange = this.onChange.bind(this);
+          this.onClick = this.onClick.bind(this);
+          this.handleAPICallback = this.handleAPICallback.bind(this);
+        }
+        
+        onChange(e) {
+          this.setState({sheetsID: e});
+        }
+        
+        onClick() {
+          handleAuthClick(this.state.sheetsID, this.handleAPICallback);
+        }
+        
+        handleAPICallback(data) {
+          var d = data[0];
+          this.setState({data: d.data, frows: d.frows, fcols: d.fcols});
+        }
+      
+        render() {
+          var size = this.state.data.reduce(function(max, value) {
+            return Math.max(max, value.length);
+          }, -1);
+          var data = this.state.data.map(function(row) {
+            return row.concat(new Array(size - row.length).fill(new Cell(false, "")));
+          });
+          
+          var preview = <PreviewTable
+            data={data}
+            frows={this.state.frows}
+            fcols={this.state.fcols}
+          />;
+          
+          return (
+          <div className="container" style={{textAlign: "center"}}>
+            <h2>Google Sheets to Wiki Table Converter</h2>
+            <InputArea onChange={this.onChange} onClick={this.onClick} defaultValue={this.state.sheetsID}/>
+            <div className="col-md-12">
+            <h3 style={{textAlign: "left"}}>Output:</h3>
+            </div>
+            <TableCode
+              data={data}
+              frows={this.props.frows}
+              fcols={this.props.fcols}
+            />
+            <div className="col-md-12">
+            <h3 style={{textAlign: "left"}}>Preview:</h3>
+            {preview}
+            </div>
+          </div>
+          );
+        }
+      }
+      ReactDOM.render(
+        <Test />,
+        document.getElementById('root')
+      );
+
+    </script>
+
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>
