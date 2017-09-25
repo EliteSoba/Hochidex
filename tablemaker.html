@@ -315,14 +315,12 @@
         return str;
       }
       function cellToString(cell) {
-		if (!cell.content) {
-			return "";
-		}
+        var content = cell.content ? cell.content : "";
         if (cell.style && !$.isEmptyObject(cell.style)) {
-          return "style=\"" + objectToCSS(cell.style) + "\" | " + cell.content;
+          return "style=\"" + objectToCSS(cell.style) + "\" | " + content;
         }
         else {
-          return cell.content;
+          return content;
         }
       }
       function TableCode(props) {
