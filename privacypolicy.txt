@@ -1,0 +1,5 @@
+Privacy Policy:
+
+This application reads from the Google Sheets document you tell it to and can access any Google Sheets document you have read access to. This application does not store or transmit any information about these documents to anywhere but your own browser. If you are skeptical of this, you are free to read the source code in your own browser or via the Github repository.
+
+By using this application, you agree that you have read the above statement and that you do not mind that this application retains absolutely nothing of consequence.
