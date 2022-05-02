@@ -437,10 +437,10 @@
 
         render() {
           var curData = this.state.data[this.state.index];
-          var size = curData.reduce(function(max, value) {
+          var size = curData.data.reduce(function(max, value) {
             return Math.max(max, value.length);
           }, -1);
-          var data = curData.map(function(row) {
+          var data = curData.data.map(function(row) {
             return row.concat(new Array(size - row.length).fill(new Cell(false, "")));
           });
 
