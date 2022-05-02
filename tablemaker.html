@@ -409,9 +409,12 @@
 
           this.state = {
             sheetsID: "16OQblLK0jqvNybW7lqFqHGatkuDoOCPN7trYOoJ-gac",
-            data:[],
-            frows: 0,
-            fcols: 0,
+            data:[{
+              data: [],
+              frows: 0,
+              fcols: 0,
+              title: '',
+            }],
             index: 0,
           };
 
@@ -429,8 +432,7 @@
         }
 
         handleAPICallback(data) {
-          var d = data[0];
-          this.setState({data: d.data, frows: d.frows, fcols: d.fcols});
+          this.setState({ data, index: 0 });
         }
 
         render() {
