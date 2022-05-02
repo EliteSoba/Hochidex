@@ -408,10 +408,11 @@
           super(props);
 
           this.state = {
-            sheetsID: "1LG-4mnxUcjD2059AoVIOe8CHeZivEbDvEu-g_LyUId8",
+            sheetsID: "16OQblLK0jqvNybW7lqFqHGatkuDoOCPN7trYOoJ-gac",
             data:[],
             frows: 0,
             fcols: 0,
+            index: 0,
           };
 
           this.onChange = this.onChange.bind(this);
@@ -433,6 +434,7 @@
         }
 
         render() {
+          var curData = this.state.data[this.state.index];
           var size = this.state.data.reduce(function(max, value) {
             return Math.max(max, value.length);
           }, -1);
@@ -441,9 +443,9 @@
           });
 
           var preview = <PreviewTable
-            data={data}
-            frows={this.state.frows}
-            fcols={this.state.fcols}
+            data={curData.data}
+            frows={curData.frows}
+            fcols={curData.fcols}
           />;
 
           return (
@@ -452,12 +454,27 @@
 						<h4><a href="privacypolicy.txt">Privacy Policy</a></h4>
             <InputArea onChange={this.onChange} onClick={this.onClick} defaultValue={this.state.sheetsID}/>
             <div className="col-md-12">
+            <ul class="nav nav-tabs nav-justified">
+              {
+                this.state.data.map((d, i) => (
+                  <li class={'nav-item'}>
+                    <a
+                      class={`nav-link${i === this.state.index ? ' active' : ''}`}
+                      href='#'
+                      onClick={() => this.setState({index, i})}
+                    >
+                      {d.title}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
             <h3 style={{textAlign: "left"}}>Output:</h3>
             </div>
             <TableCode
-              data={data}
-              frows={this.state.frows}
-              fcols={this.state.fcols}
+              data={curData.data}
+              frows={curData.frows}
+              fcols={curData.fcols}
             />
             <div className="col-md-12">
             <h3 style={{textAlign: "left"}}>Preview:</h3>
