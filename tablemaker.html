@@ -437,15 +437,15 @@
 
         render() {
           var curData = this.state.data[this.state.index];
-          var size = this.state.data.reduce(function(max, value) {
+          var size = curData.reduce(function(max, value) {
             return Math.max(max, value.length);
           }, -1);
-          var data = this.state.data.map(function(row) {
+          var data = curData.map(function(row) {
             return row.concat(new Array(size - row.length).fill(new Cell(false, "")));
           });
 
           var preview = <PreviewTable
-            data={curData.data}
+            data={data}
             frows={curData.frows}
             fcols={curData.fcols}
           />;
@@ -474,7 +474,7 @@
             <h3 style={{textAlign: "left"}}>Output:</h3>
             </div>
             <TableCode
-              data={curData.data}
+              data={data}
               frows={curData.frows}
               fcols={curData.fcols}
             />
