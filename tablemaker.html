@@ -382,7 +382,7 @@
 
         render() {
           return (
-            <div>
+            <div className={"row"}>
               <div className={"col-md-8"}>
                 <input
                   onChange={this.onChange}
@@ -452,7 +452,7 @@
             fcols={curData.fcols}
           />;
 
-          var navBar = this.state.data.length > 1 ? 
+          var navBar = this.state.data.length > 1 ?
             this.state.data.map((d, i) => (
               <li className={'nav-item'} key={`${d.title}${i}`}>
                 <a
@@ -471,19 +471,22 @@
 						<h4><a href="privacypolicy.txt">Privacy Policy</a></h4>
             <InputArea onChange={this.onChange} onClick={this.onClick} defaultValue={this.state.sheetsID}/>
             <div className="col-md-12">
-            <ul className="nav nav-tabs">
-              {navBar}
-            </ul>
-            <h3 style={{textAlign: "left"}}>Output:</h3>
+              <ul className="nav nav-tabs" style={{ marginTop: '30px' }}>
+                {navBar}
+              </ul>
+              <h3 style={{textAlign: "left"}}>Output:</h3>
             </div>
             <TableCode
               data={data}
               frows={curData.frows}
               fcols={curData.fcols}
             />
+            <div className="col-md-12" style={{ marginTop: '20px' }}>
+              <button className="btn btn-primary" onClick={() => navigator.clipboard.writeText(document.getElementById('textarea').innerHTML)}>Copy</button>
+            </div>
             <div className="col-md-12">
-            <h3 style={{textAlign: "left"}}>Preview:</h3>
-            {preview}
+              <h3 style={{textAlign: "left", marginTop: '25px'}}>Preview:</h3>
+              {preview}
             </div>
           </div>
           );
