@@ -337,10 +337,10 @@
           var row = "";
           for (var j = 0; j < props.data[i].length; j++) {
             if (j < props.fcols || i < props.frows) {
-              row += "!! ";
+              row += j === 0 ? "! " : "!! ";
             }
             else {
-              row += "|| ";
+              row += j === 0 ? "| " : "|| ";
             }
             row += cellToString(props.data[i][j]) + " ";
           }
